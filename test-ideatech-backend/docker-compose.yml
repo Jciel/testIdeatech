@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+    php:
+        build:
+            # context: ./php # Indica onde está o arquivo Dockerfile
+            dockerfile: Dockerfile
+        container_name: php-ideatech # Apelido para o container
+        volumes:
+            - ./:/var/www/html/ # Irá copiar o conteúdo da pasta src para o container
+        environment:
+          - APACHE_DOCUMENT_ROOT=/var/www/html/public
+        ports: # Mapear as portas para ficarem visiveis na máquina host
+            - "8080:80"
+            - "443:443"
+        links: # Criar conexão com o container do banco de dados
+            - postgres
+
+    postgres:
+        image: postgres:12
+        container_name: php-postgres-ideatech
+        restart: always
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_PASSWORD=postgres
+#-----------------------------------------------------------------------------------------------------------------------------------------------#
